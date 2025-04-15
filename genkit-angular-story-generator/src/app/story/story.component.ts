@@ -30,58 +30,7 @@ const DEFAULT_STORY: StoryData = {
   templateUrl: './story.component.html',
   styleUrl: './story.component.scss'
 })
-export class StoryComponent {
-  storyService = inject(StoryService);
-  endpoint = computed(() => this.storyService.hasStoryStarted() ? CONTINUE_FLOW : BEGIN_FLOW);
-
-  // Data to control presentational state
-  isStoryOver = computed(() => this.progress() && this.progress() === 1);
-  showTheEnd = computed(() => this.isStoryOver() && !this.storyResource.isLoading());
-  loadingStories = ['', '', ''];
-
-  // Use a linked signal to preserve old value while storyResource is loading
-  primaryObjective = linkedSignal<string, string>({
-    source: () => this.storyResource.value().primaryObjective,
-    computation: (newPrimaryObjective, previous) => {
-      const useOldValue = this.storyResource.isLoading() || newPrimaryObjective === '';
-      return useOldValue ? (previous?.value || '') : newPrimaryObjective;
-    }
-  });
-
-  // Use a linked signal to preserve old value while storyResource is loading
-  progress = linkedSignal<number, number>({
-    source: () => this.storyResource.value().progress,
-    computation: (newProgress, previous) => {
-      const useOldValue = this.storyResource.isLoading() || newProgress === -1;
-      return useOldValue ? (previous?.value || 0) : newProgress;
-    }
-  });
-
-  // Use a linked signal to preserve existing parts of the story
-  storyParts = linkedSignal<string[], string[]>({
-    source: () => this.storyResource.value().storyParts,
-    computation: (newStoryParts, previous) => {
-      if (this.endpoint() === BEGIN_FLOW) {
-        return newStoryParts;
-      } else {
-        return [...previous!.value, ...newStoryParts];
-      }
-    }
-  });
-
-  // A resource that requests story data
-  storyResource = resource({
-    defaultValue: DEFAULT_STORY,
-    request: () => this.storyService.storyInput(),
-    loader: ({request}): Promise<StoryData> => {
-      const url = this.endpoint();
-      return runFlow({ url, input: {
-        userInput: request,
-        sessionId: this.storyService.sessionId()
-      }});
-    }
-  });
-}
+export class StoryComponent {}
 
 interface StoryData {
   primaryObjective: string;

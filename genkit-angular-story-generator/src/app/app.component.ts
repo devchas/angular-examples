@@ -17,7 +17,4 @@ import { StoryService, DESCRIPTION_FLOW } from './story.service';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
-  storyService = inject(StoryService);
-  endpoint = DESCRIPTION_FLOW;
-}
+export class AppComponent {}

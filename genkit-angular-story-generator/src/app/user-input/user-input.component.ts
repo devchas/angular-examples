@@ -22,33 +22,4 @@ const RATING_TEXT: { [key: string]: string} = {
   templateUrl: './user-input.component.html',
   styleUrl: './user-input.component.scss'
 })
-export class UserInputComponent {
-  storyService = inject(StoryService);
-  endpoint = input.required<string>();
-  options = input.required<string[]>();
-  isLoading = input<boolean>(false);
-  rating = input<string>();
-  ratingText = computed(() => RATING_TEXT[(this.rating()?.toLowerCase() || '')]);
-  isDescriptionFlow = computed(() => this.endpoint() === DESCRIPTION_FLOW);
-  userInput = '';
-
-  onClickOption(option: string): void {
-    this.userInput = option;
-  }
-
-  onSubmit(): void {
-    if (this.isDescriptionFlow()) {
-      this.storyService.premiseInput.set(this.userInput);
-    } else {
-      this.storyService.hasStoryStarted.set(true);
-      this.storyService.storyInput.set(this.userInput);
-    }
-    this.userInput = '';
-  }
-
-  onUpdateStory(): void {
-    this.storyService.storyInput.set(this.storyService.premiseResource.value().storyPremise);
-    this.storyService.hasPremiseUpdated.set(false);
-    this.userInput = '';
-  }
-}
+export class UserInputComponent {}

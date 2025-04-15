@@ -20,19 +20,4 @@ const LOADING_STATUSES = [ResourceStatus.Loading, ResourceStatus.Reloading];
   templateUrl: './image.component.html',
   styleUrl: './image.component.scss'
 })
-export class ImageComponent {
-  private readonly storyService = inject(StoryService);
-  story = input<string>('');
-  isLoading = computed(() => LOADING_STATUSES.includes(this.imgResource.status()));
-
-  imgResource = resource({
-    defaultValue: '',
-    request: () => this.story(),
-    loader: ({request}) => {
-      return runFlow({
-        url: IMG_FLOW,
-        input: { story: request, sessionId: this.storyService.sessionId() }
-      });
-    }
-  });
-}
+export class ImageComponent {}

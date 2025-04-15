@@ -17,13 +17,8 @@
 </div>
 
 <div class="body">
-  @if (!storyService.hasStoryStarted()) {
     <div class="controls">
-      <app-user-input
-        [endpoint]="endpoint"
-        [options]="storyService.premiseResource.value().premiseOptions"
-        [isLoading]="storyService.premiseResource.isLoading()" />
+      <app-user-input />
     </div>
-  }
-  <app-story />
+    <app-story />
 </div>

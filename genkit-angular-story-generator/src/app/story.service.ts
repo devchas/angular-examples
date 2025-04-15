@@ -18,52 +18,14 @@ const DEFAULT_PREMISE: StoryPremise = {
 @Injectable({
   providedIn: 'root'
 })
-export class StoryService {
-  // Used to manage app presentation state
-  hasStoryStarted = signal(false);
-  // Used to manage input the story description requests
-  premiseInput = signal('');
-  // Used to manage input the story generation requests
-  storyInput = signal('');
-
-  // Only set this on the first request.
-  // Note: this approach is for demonstration purposes. Consider alternative approaches to
-  // session management in a production application.
-  sessionId = linkedSignal<string, string>({
-    source: () => this.premiseResource.value().storyPremise,
-    computation: (_agentResponse, previous) =>
-      (!previous ? Date.now() + '' + Math.floor(Math.random() * 1000000000) : previous.value)
-  });
-
-  // Used to determine whether to show the update story button in the UserInputComponenet
-  hasPremiseUpdated = linkedSignal<string, boolean>({
-    source: () => this.premiseResource.value().storyPremise,
-    computation: (newPremise, previous) => (previous || false) && newPremise !== previous!.source
-  });
-
-  // Only clear the session on initial page load
-  clearSession = linkedSignal<string, boolean>({
-    source: () => this.premiseResource.value().storyPremise,
-    computation: (_newPremise, previous) => !previous
-  });
-
-  // A resource that requests update story premise information based on user input
-  premiseResource = resource({
-    defaultValue: DEFAULT_PREMISE,
-    request: () => this.premiseInput(),
-    loader: ({request}): Promise<StoryPremise> => runFlow({
-      url: DESCRIPTION_FLOW,
-      input: {
-        userInput: request,
-        sessionId: this.sessionId(),
-        clearSession: this.clearSession()
-      }
-    })
-  });
-}
+export class StoryService {}
 
 interface StoryPremise {
   storyPremise: string;
   nextQuestion: string;
   premiseOptions: string[];
+}
+
+function randomId(): string {
+  return Date.now() + '' + Math.floor(Math.random() * 1000000000);
 }
